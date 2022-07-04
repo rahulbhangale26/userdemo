@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'pull_users_api'
 ]
 
 MIDDLEWARE = [
@@ -76,11 +78,11 @@ WSGI_APPLICATION = 'userdemo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'demo',
-        'USER': '****',
-        'PASSWORD': '****',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': 'demo_rbhangale',
+        'USER': 'psDba',
+        'PASSWORD': 'dba',
+        'HOST': '192.168.171.22',
+        'PORT': '5433',
     }
 }
 

@@ -7,5 +7,6 @@
 
 ## Setup Project and App
 
-1. start a project: django-admin startproject userdemo
-2. start a development server: python manage.py runserver
+1. Start a project: django-admin startproject userdemo
+2. Start a development server: python manage.py runserver
+3. Setup Database: Go to settings.py and add the database credentials.
