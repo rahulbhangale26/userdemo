@@ -7,6 +7,7 @@ class Users(models.Model):
 	last_name = models.CharField(max_length=200)
 	gender = models.PositiveSmallIntegerField()
 	email = models.CharField(max_length=200)
+	username = models.CharField(max_length=200)
 	city = models.CharField(max_length=100)
 	state = models.CharField(max_length=100)
 	postcode = models.CharField(max_length=10)

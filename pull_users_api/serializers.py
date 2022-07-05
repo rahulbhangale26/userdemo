@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Users
  
  
-class UsersSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Users
@@ -12,6 +12,7 @@ class UsersSerializer(serializers.ModelSerializer):
 				  'last_name',
                   'gender',
                   'email',
+                  'username',
                   'city',
                   'state',
                   'postcode',
