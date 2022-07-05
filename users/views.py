@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from collections import ChainMap  
 # Create your views here.
 
-@api_view( ['POST'] )
+@api_view( ['GET','POST'] )
 def users( request ):
 	saved_params = {}
 	params = {}
@@ -54,21 +54,20 @@ def users( request ):
 	if( params['page'] not in pageinator.page_range ):
 		return JsonResponse( { 'response': 'error', 'message': 'Invalid page number.'}, status=status.HTTP_201_CREATED )
 
-	return JsonResponse( {'response': '{}'.format( objectsToUserList( pageinator.page( params['page'] ).object_list ) ) }, status=status.HTTP_201_CREATED )
+	return JsonResponse( {"users": json.dumps( objectsToUserList( pageinator.page( params['page'] ).object_list ) ) }, status=status.HTTP_201_CREATED )
 
 def objectsToUserList( users ):
 	return [ {
-			'first_name': user.first_name,
-			'last_name': user.last_name,
-			'title': user.title,
-			'gender': getGenderName( user.gender ),
-			'email': user.email,
-			'username': user.username,
-			'city': user.city,
-			'state': user.state,
-			'postcode': user.postcode,
-			'phone': user.phone,
-			'dob': datetime.strftime( user.dob, '%Y-%m-%d' )
+			"id": user.id,
+			"name": user.title + ' ' + user.first_name + ' ' + user.last_name,
+			"gender": getGenderName( user.gender ),
+			"username": user.username,
+			"phone": user.phone,
+			"email": user.email,
+			"city": user.city,
+			"state": user.state,
+			"postcode": user.postcode,
+			"dob": datetime.strftime( user.dob, '%Y-%m-%d' )
 	} for user in users ]
 
 def getGenderName( genderId ):
