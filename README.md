@@ -27,6 +27,7 @@
 * Navigate to userdemo/user-list-ui/
 * Install node modules: npm install
 * Execute: npm start
-* Open http://localhost:8000/api/pull_users/1000 - This will pull the users and store into database
+* Open http://localhost:8000/api/pull_users/1000 - This will pull the users and store into database. 
+* Open http://localhost:8000/api/pull_users/<count_to_pull_users> - This will pull the users and store into database. 
 * Open http://localhost:3000 - This will open the interface which will pull the user lists from the database.
 . 
