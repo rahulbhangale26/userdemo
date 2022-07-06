@@ -11,6 +11,7 @@
 * Clone the repo: git clone https://github.com/rahulbhangale26/userdemo.git
 * Create a database demo on postgresql server. We use other engines, Configure following settings accordingly.
 * Navigate to userdemo/userdemo/settings.php and update database credentials 
+  ```
   DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -20,7 +21,8 @@
         'HOST': '127.0.01',
         'PORT': '5433',
     }
-}
+  }
+```
 * Naviage to userdemo/ and open command prompt there
 * Execute migration command: python manage.py migrate
 * Start the Server: python manage.py runserver
