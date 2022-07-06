@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'userdemo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'demo_rbhangale',
-        'USER': 'psDba',
-        'PASSWORD': 'dba',
-        'HOST': '192.168.171.22',
-        'PORT': '5433',
+        'NAME': 'demo',
+        'USER': 'username',
+        'PASSWORD': 'pass',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
