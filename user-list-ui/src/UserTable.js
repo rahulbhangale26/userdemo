@@ -1,67 +1,62 @@
 import React, { Component }  from 'react';
 import axios from "axios";
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
-
-const columns = [
-      {
-        label: '#',
-        field: 'id',
-        sort: 'asc',
-      },
-      {
-        label: 'Name',
-        field: 'name'
-      },
-      {
-        label: 'Gender',
-        field: 'gender'
-      },
-      {
-        label: 'Email',
-        field: 'email'
-      }
-    ];
+import UserDetails from './UserDetails.js'
 
 export default class UserTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: []
-    };
+  state = {
+      data: [],
+      isShowUserDetails: false,
+      user_id: 1
+  }
 
-    axios({
-      url: "http://localhost:8000/api/users/",
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ page: 1, page_size: 5 }),
-    })
-      .then((res) => { 
-        this.state.data = JSON.parse( res.data.users )
-        console.log( this.state.data )
-        this.setState( { data: JSON.parse( res.data.users ) } )
-      })
-      .catch((err) => { });
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.data });  
   }
 
   componentDidMount() {
-
   }
 
   componentDidUpdate() {
-    console.log( 'Set State Called' )
+
   }
 
-  parseData = data => {
-    console.log( typeof data.response );
-    this.state.data= data.response
-  } 
+  showUserDetails = (user_id ) => {
+    this.setState( { isShowUserDetails: true, user_id: user_id } )
+  }
+
+  hideUserDetails = () => {
+    this.setState( { isShowUserDetails: false, user_id: 0 } ) 
+  }
 
   render() {
     return (
-      <MDBTable autoWidth striped>
-        <MDBTableHead columns={columns} />
-        <MDBTableBody rows={this.state.data} />
-      </MDBTable>
+      <div {...this.props}>
+        <table className="table w-auto table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.state.data.map((item,index) => 
+                <tr key={item.id} onClick={() => this.showUserDetails(item.id)}>
+                  <td> {item.id}  </td> 
+                  <td> {item.name} </td>
+                  <td> {item.username} </td>
+                  <td> {item.email} </td>
+                  <td> {item.phone} </td> 
+                </tr>
+              )
+            }
+          </tbody>
+        </table>
+        {this.state.isShowUserDetails && ( <UserDetails close={() => this.hideUserDetails()} user_id={this.state.user_id}></UserDetails> )}
+      </div>
     );
   }
 }

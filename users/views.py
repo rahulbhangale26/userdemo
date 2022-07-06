@@ -11,6 +11,32 @@ from django.core.paginator import Paginator
 from collections import ChainMap  
 # Create your views here.
 
+@api_view( ['GET'] )
+def user(request, user_id):
+	user_id = int( user_id )
+
+	if( 0 >= user_id ):
+		return JsonResponse( { 'response': 'error', 'message': 'Invalid user id.'}, status=status.HTTP_201_CREATED )
+
+	try:
+		user = Users.objects.get( Q(id=user_id) )
+	except Users.DoesNotExist:
+		return JsonResponse( { 'response': 'error', 'message': 'Record not found.'}, status=status.HTTP_201_CREATED )
+
+	userDict = {
+		"id": user.id,
+		"name": user.title + ' ' + user.first_name + ' ' + user.last_name,
+		"username": user.username,
+		"phone": user.phone,
+		"email": user.email,
+		"city": user.city,
+		"state": user.state,
+		"dob": user.dob
+	}	
+
+	return JsonResponse( {"response": "success", "user": userDict }, status=status.HTTP_201_CREATED )
+
+
 @api_view( ['GET','POST'] )
 def users( request ):
 	saved_params = {}
@@ -18,7 +44,7 @@ def users( request ):
 
 	defaults = {
 		'page': 1,
-		'page_size': 100,
+		'page_size': 20,
 		'name': '',
 		'id': '',
 		'gender': ''
@@ -54,21 +80,24 @@ def users( request ):
 	if( params['page'] not in pageinator.page_range ):
 		return JsonResponse( { 'response': 'error', 'message': 'Invalid page number.'}, status=status.HTTP_201_CREATED )
 
-	return JsonResponse( {"users": json.dumps( objectsToUserList( pageinator.page( params['page'] ).object_list ) ) }, status=status.HTTP_201_CREATED )
+	page = pageinator.page( params['page'] )
 
-def objectsToUserList( users ):
-	return [ {
+	userList = [ {
 			"id": user.id,
 			"name": user.title + ' ' + user.first_name + ' ' + user.last_name,
-			"gender": getGenderName( user.gender ),
 			"username": user.username,
 			"phone": user.phone,
 			"email": user.email,
-			"city": user.city,
-			"state": user.state,
-			"postcode": user.postcode,
-			"dob": datetime.strftime( user.dob, '%Y-%m-%d' )
-	} for user in users ]
+			} for user in page.object_list ]
+
+	return JsonResponse( {
+		"response": "success", 
+		"users": json.dumps( userList ), 
+		"pagination": {  
+			'next_page_number': page.next_page_number() if True == page.has_next() else '',
+			'previous_page_number': page.previous_page_number() if True == page.has_previous() else ''
+		} 
+	}, status=status.HTTP_201_CREATED )
 
 def getGenderName( genderId ):
 	if( 1 == genderId ):
