@@ -21,8 +21,8 @@
         'HOST': '127.0.01',
         'PORT': '5433',
     }
-  }
-```
+  }```
+
 * Naviage to userdemo/ and open command prompt there
 * Execute migration command: python manage.py migrate
 * Start the Server: python manage.py runserver
