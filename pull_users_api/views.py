@@ -1,18 +1,46 @@
+import django
+django.setup()
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from datetime import datetime
+import multiprocessing
 import requests
 import json
 
 # Create your views here.
 
+
 @api_view(['GET', 'PUT'])
 def pull_users(request, user_counts):
-	res = requests.get( 'https://randomuser.me/api/?results={}&nat=US' . format( user_counts ) ).json()
-	return JsonResponse({'response': '{}'.format( saveUsers( res['results'] ) ) }, status=status.HTTP_201_CREATED)
+
+	batch_count = 1000
+	processes = []
+	response = []
+	user_counts = int( user_counts )
+
+	while( user_counts > 0 ):
+		if( user_counts < 1000 ):
+			batch_count = user_counts
+
+		p = multiprocessing.Process(target=pullAndSave, args=[batch_count])
+		p.start()
+		processes.append( p )
+		response.append( {'message': 'Added Parallel Process for user_counts: {}' .format( batch_count ) } )
+
+		user_counts = user_counts - batch_count
+
+	for p in processes:
+		p.join()
+
+	return JsonResponse({'response': '{}'.format( response ) }, status=status.HTTP_201_CREATED)
+
+def pullAndSave( batch_count ):
+	res = requests.get( 'https://randomuser.me/api/?results={}&nat=US' . format( batch_count ) ).json()
+	saveUsers( res['results'] )
+	
 
 def saveUsers( res ):
 	users = []
